@@ -158,8 +158,5 @@ const getMonthName = (month, year) => {
     "November",
     "December"
   ]
-
-
   actualMonth.innerHTML = monthNameList[month] + ", " + year
-
 }
