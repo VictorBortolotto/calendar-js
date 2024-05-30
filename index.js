@@ -7,7 +7,11 @@ app.use(
 )
 
 app.get('/calendar', (req, res) => {
-  res.sendFile(__dirname + '/src/public/calendar.html')
+  res.sendFile(__dirname + '/src/public/opened.calendar/calendar.html')
+})
+
+app.get('/modal/calendar', (req, res) => {
+  res.sendFile(__dirname + '/src/public/modal.calendar/calendar.html')
 })
 
 app.listen(port, () => {

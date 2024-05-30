@@ -21,6 +21,12 @@ const previousButtonClick = () => {
   buildCalendar(month, year)
 }
 
+const onClickButtonDay = (id) => {
+  let buttonDay = document.getElementById(id)
+  let date = new Date(year, month, buttonDay.textContent);
+  showToast(date.toLocaleDateString())
+}
+
 const buildCalendar = (month, year) => {
   let daysInWeeks = getAllDaysMonthInWeeks(year, month)
 
