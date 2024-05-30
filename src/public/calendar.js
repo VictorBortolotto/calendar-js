@@ -8,7 +8,7 @@ const nextButtonClick = () => {
     month = 0
   }
 
-  getAllDaysMonth(month, year)
+  buildCalendar(month, year)
 }
 
 const previousButtonClick = () => {
@@ -18,82 +18,112 @@ const previousButtonClick = () => {
     month = 11
   }
 
-  getAllDaysMonth(month, year)
+  buildCalendar(month, year)
 }
 
-const getAllDaysMonth = (month, year) => {
-  let date = new Date(year, month, 1);
-  let day = {
-    name: "",
-    number: 0,
-    nameLowerCase: ""
-  }
+const buildCalendar = (month, year) => {
+  let daysInWeeks = getAllDaysMonthInWeeks(year, month)
 
-  const daysWeek = []
-  while(date.getMonth() === month){
-    for(let i = 0; i < days().length; i++){
-      if(date.toUTCString().indexOf(days()[i].dayUpperCase) === 0){
-        day.name = days()[i].dayUpperCase
-        day.number = date.getDate()
-        day.nameLowerCase = days()[i].dayLowerCase
-        daysWeek.push(day)
-      }
-    }
-    day = {}
-    date.setDate(date.getDate() + 1)
-  }
+  let daysMappingPositions = getMappingOfCalendarDaysPositions()
 
-  let countDays = 0
-  let allDayId = []
-  for (let k = 0; k < 42; k++){
-    if(countDays < 7){
-      day.name = days()[countDays].dayUpperCase
-      day.number = 0
-      day.nameLowerCase = days()[countDays].dayLowerCase
-      allDayId.push(day)
-    }else{
-      countDays = 0
-      day.name = days()[countDays].dayUpperCase
-      day.number = 0
-      day.nameLowerCase = days()[countDays].dayLowerCase
-      allDayId.push(day)
-    }
-    day = {}
-    countDays += 1
-  }
+  let logicalCalendar = createLogicalCalendar(daysMappingPositions, daysInWeeks)
+  
+  fillHTMLCalendar(month, year, logicalCalendar)
+}
 
-  let calendarIndex = 0
-  for (let daysInCalendar = 0; daysInCalendar < allDayId.length; daysInCalendar++){
-    if (allDayId[daysInCalendar].nameLowerCase === daysWeek[0].nameLowerCase && daysInCalendar <= calendarIndex) {
-      for(let daysInWeek = 0; daysInWeek < daysWeek.length; daysInWeek++){
-        if(calendarIndex < allDayId.length){
-          allDayId[calendarIndex].name = daysWeek[daysInWeek].name
-          allDayId[calendarIndex].nameLowerCase = daysWeek[daysInWeek].nameLowerCase + calendarIndex
-          allDayId[calendarIndex].number = daysWeek[daysInWeek].number
-        }
-        calendarIndex += 1
-      }
-      daysInCalendar = calendarIndex 
-      allDayId[daysInCalendar].nameLowerCase = allDayId[daysInCalendar].nameLowerCase + daysInCalendar
-    }else{
-      calendarIndex += 1
-      allDayId[daysInCalendar].nameLowerCase = allDayId[daysInCalendar].nameLowerCase + daysInCalendar
-    }
-  }
-
-  for(let day = 0; day < allDayId.length; day++){
+const fillHTMLCalendar = (month, year, logicalCalendar) => {
+  for(let day = 0; day < logicalCalendar.length; day++){
     let daysInCalendar = document.getElementById("day-button-" + day)
 
-    if(allDayId[day].number > 0) {
-      daysInCalendar.innerHTML = allDayId[day].number
+    if(logicalCalendar[day].number > 0) {
+      daysInCalendar.innerHTML = logicalCalendar[day].number
+      daysInCalendar.style.display = 'flex'
     }else {
       daysInCalendar.innerHTML = ''
+      daysInCalendar.style.display = 'none'
     }
   }
 
   getMonthName(month, year)
   this.month = month
   this.year = year
+}
+
+
+const createLogicalCalendar = (daysMappingPositions, daysInWeeks) => {
+  let calendarIndex = 0
+  for (let daysInCalendar = 0; daysInCalendar < daysMappingPositions.length; daysInCalendar++){
+    if (daysMappingPositions[daysInCalendar].nameLowerCase === daysInWeeks[0].nameLowerCase && daysInCalendar <= calendarIndex) {
+      for(let daysInWeek = 0; daysInWeek < daysInWeeks.length; daysInWeek++){
+        if(calendarIndex < daysMappingPositions.length){
+          daysMappingPositions[calendarIndex].name = daysInWeeks[daysInWeek].name
+          daysMappingPositions[calendarIndex].nameLowerCase = daysInWeeks[daysInWeek].nameLowerCase + calendarIndex
+          daysMappingPositions[calendarIndex].number = daysInWeeks[daysInWeek].number
+        }
+        calendarIndex += 1
+      }
+      daysInCalendar = calendarIndex 
+      daysMappingPositions[daysInCalendar].nameLowerCase = daysMappingPositions[daysInCalendar].nameLowerCase + daysInCalendar
+    }else{
+      calendarIndex += 1
+      daysMappingPositions[daysInCalendar].nameLowerCase = daysMappingPositions[daysInCalendar].nameLowerCase + daysInCalendar
+    }
+  }
+
+  return daysMappingPositions
+}
+
+const getAllDaysMonthInWeeks = (year, month) => {
+  let day = {
+    name: "",
+    number: 0,
+    nameLowerCase: ""
+  }
+
+  let date = new Date(year, month, 1);
+  const daysInWeek = []
+  while(date.getMonth() === month){
+    for(let i = 0; i < days().length; i++){
+      if(date.toUTCString().indexOf(days()[i].dayUpperCase) === 0){
+        day.name = days()[i].dayUpperCase
+        day.number = date.getDate()
+        day.nameLowerCase = days()[i].dayLowerCase
+        daysInWeek.push(day)
+      }
+    }
+    day = {}
+    date.setDate(date.getDate() + 1)
+  }
+
+  return daysInWeek
+}
+
+const getMappingOfCalendarDaysPositions = () => {
+  let day = {
+    name: "",
+    number: 0,
+    nameLowerCase: ""
+  }
+
+  let countDays = 0
+  let daysPositionsInCalendar = []
+  for (let k = 0; k < 42; k++){
+    if(countDays < 7){
+      day.name = days()[countDays].dayUpperCase
+      day.number = 0
+      day.nameLowerCase = days()[countDays].dayLowerCase
+      daysPositionsInCalendar.push(day)
+    }else{
+      countDays = 0
+      day.name = days()[countDays].dayUpperCase
+      day.number = 0
+      day.nameLowerCase = days()[countDays].dayLowerCase
+      daysPositionsInCalendar.push(day)
+    }
+    day = {}
+    countDays += 1
+  }
+  return daysPositionsInCalendar
 }
 
 const days = () => {
