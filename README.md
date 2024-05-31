@@ -34,3 +34,14 @@
 
 <p>After to do all the steps the project will run in port 4200, and you can go to http://localhost:4200/calendar to see an example of the calendar or to http://localhost:4200/modal/calendar to an exemple 
 of how call the calendar with a button click.</p>
+
+<hr></hr>
+
+</br> 
+<h2 style="border: none">Victor Augusto Campos Bortolotto</h2>
+<img style="width: 100px; height: 100px" src="https://avatars.githubusercontent.com/u/50971139?v=4" alt=""/>
+
+</br>
+
+[![Linkedin Badge](https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/victor-augusto-campos-bortolotto/)](https://www.linkedin.com/in/victor-augusto-campos-bortolotto/) 
+[![Gmail Badge](https://img.shields.io/badge/-victorcamposbortolottowork@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:victorcamposbortolottowork@gmail.com)](mailto:victorcamposbortolottowork@gmail.com)
