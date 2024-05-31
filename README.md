@@ -1,4 +1,3 @@
-# calendar-js
 <h1 align="center">Calendar JS</h1>
 
 ## Project description
